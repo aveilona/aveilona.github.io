@@ -228,6 +228,28 @@
     resolveClone();
     updateUI();
   });
+  var touchStartX=0, touchStartY=0, touchDeltaX=0, isSwiping=false;
+  var viewportEl=document.querySelector('.cs-carousel-viewport');
+  viewportEl.addEventListener('touchstart',function(e){
+    touchStartX=e.touches[0].clientX;
+    touchStartY=e.touches[0].clientY;
+    touchDeltaX=0;
+    isSwiping=true;
+  },{passive:true});
+  viewportEl.addEventListener('touchmove',function(e){
+    if(!isSwiping)return;
+    var dx=e.touches[0].clientX-touchStartX;
+    var dy=e.touches[0].clientY-touchStartY;
+    if(Math.abs(dx)>Math.abs(dy)){ e.preventDefault(); }
+    touchDeltaX=dx;
+  },{passive:false});
+  viewportEl.addEventListener('touchend',function(){
+    if(!isSwiping)return;
+    isSwiping=false;
+    if(Math.abs(touchDeltaX)>40){
+      if(touchDeltaX<0){ step(1); } else { step(-1); }
+    }
+  });
   document.getElementById('csPrev').addEventListener('click',function(){step(-1);});
   document.getElementById('csNext').addEventListener('click',function(){step(1);});
   dots.forEach(function(d){d.addEventListener('click',function(){jumpTo(parseInt(d.dataset.index));});});
