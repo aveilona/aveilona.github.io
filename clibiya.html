@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Clibiya — Ilona Harhasevich</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --white: #FFFFFF;
+    --black: #0A0A0A;
+    --grey: #666666;
+    --grey-light: #E8E8E8;
+    --surface: #F5F3FF;
+    --accent: #4E0FFA;
+    --accent-dim: rgba(78,15,250,0.06);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+  .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--grey-light); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 60px; }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--black); text-decoration: none; letter-spacing: -0.01em; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-size: 13px; font-weight: 500; color: var(--grey); text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  .placeholder { width: 100%; background: var(--accent-dim); border: 1px solid rgba(78,15,250,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; position: relative; overflow: hidden; }
+  .placeholder::before { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(78,15,250,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(78,15,250,0.04) 1px, transparent 1px); background-size: 32px 32px; }
+  .placeholder svg { opacity: 0.2; position: relative; z-index: 1; }
+  .placeholder span { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); opacity: 0.5; position: relative; z-index: 1; font-family: 'DM Sans', sans-serif; }
+
+  .meta-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.05em; padding: 5px 12px; border: 1px solid var(--grey-light); color: var(--grey); border-radius: 2px; }
+  .meta-tag.accent { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+  @media (max-width: 900px) {
+    .site-nav { padding: 0 24px; }
+    .nav-links { display: none; }
+  }
+
+
+  .cs-hero { padding: 140px 48px 80px; }
+  .cs-number { font-family: 'DM Serif Display', serif; font-size: 13px; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 24px; display: block; opacity: 0; animation: csNumberFadeUp 0.7s ease-out 0.1s forwards; }
+  .cs-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; opacity: 0; animation: heroFadeUp 0.7s ease-out 0.1s forwards; }
+  .cs-title { font-family: 'DM Serif Display', serif; font-size: clamp(40px, 6vw, 80px); line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 16px; opacity: 0; animation: heroFadeUp 0.7s ease-out 0.25s forwards; }
+  .cs-subtitle { font-size: 18px; color: var(--grey); font-style: italic; margin-bottom: 40px; opacity: 0; animation: heroFadeUp 0.7s ease-out 0.4s forwards; }
+  .cs-overview { font-size: 18px; color: var(--grey); line-height: 1.75; max-width: 720px; opacity: 0; animation: heroFadeUp 0.7s ease-out 0.4s forwards; }
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes csNumberFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 0.5; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cs-number { animation: none; opacity: 0.5; transform: none; }
+    .cs-tag, .cs-title, .cs-subtitle, .cs-overview, .cs-carousel, .cs-carousel-footer { animation: none; opacity: 1; transform: none; }
+  }
+
+  .cs-carousel { position: relative; padding: 0 80px; opacity: 0; animation: heroFadeUp 0.7s ease-out 0.55s forwards; }
+  .cs-carousel-viewport { overflow: hidden; border-radius: 12px; }
+  .cs-carousel-track { display: flex; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); will-change: transform; }
+  .cs-carousel-slide { width: 100%; flex: 0 0 100%; aspect-ratio: 16/9; }
+  .cs-carousel-slide .placeholder { height: 100%; aspect-ratio: unset; border: none; border-radius: 0; background: var(--accent-dim); }
+  .cs-carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; background: var(--white); border: 1px solid var(--grey-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s, color 0.2s; z-index: 2; color: var(--black); }
+  .cs-carousel-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cs-carousel-btn.cs-prev { left: 24px; }
+  .cs-carousel-btn.cs-next { right: 24px; }
+  .cs-carousel-footer { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px 48px; border-bottom: 1px solid var(--grey-light); background: var(--white); opacity: 0; animation: heroFadeUp 0.7s ease-out 0.55s forwards; }
+  .cs-carousel-dots { display: flex; gap: 8px; }
+  .cs-carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--grey-light); border: none; cursor: pointer; transition: background 0.2s, transform 0.2s; padding: 0; }
+  .cs-carousel-dot.active { background: var(--accent); transform: scale(1.3); }
+  .cs-carousel-counter { font-size: 11px; color: var(--grey); letter-spacing: 0.06em; font-family: 'DM Sans', sans-serif; }
+
+  .cs-content { display: grid; grid-template-columns: 1fr 340px; gap: 80px; padding: 80px 48px; border-bottom: 1px solid var(--grey-light); align-items: start; }
+  .cs-sections { display: flex; flex-direction: column; gap: 40px; }
+  .cs-section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .cs-section-body p { font-size: 16px; color: var(--grey); line-height: 1.75; margin-bottom: 12px; }
+  .cs-section-body p:last-child { margin-bottom: 0; }
+
+  .cs-sidebar { position: sticky; top: 80px; }
+  .cs-sidebar-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+  .cs-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .live-link { display: inline-block; font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; padding: 10px 20px; border: 1.5px solid var(--accent); border-radius: 2px; transition: background 0.2s, color 0.2s; }
+  .live-link:hover { background: var(--accent); color: var(--white); }
+
+  .cs-nav { padding: 64px 48px; border-top: 1px solid var(--grey-light); }
+  .cs-nav-inner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 48px; }
+  .cs-nav-link { text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .cs-nav-link.next { text-align: right; justify-self: end; }
+  .cs-nav-dir { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
+  .cs-nav-title { font-family: 'DM Serif Display', serif; font-size: 15px; letter-spacing: -0.01em; transition: color 0.2s; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cs-nav-link:hover .cs-nav-title { color: var(--accent); }
+  .cs-nav-home { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); text-decoration: none; text-align: center; padding: 10px 20px; border: 1px solid var(--grey-light); border-radius: 2px; transition: color 0.2s, border-color 0.2s; }
+  .cs-nav-home:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .cs-hero { padding: 80px 24px 48px; }
+    .cs-carousel { padding: 0; }
+    .cs-carousel-viewport { border-radius: 0; }
+    .cs-carousel-btn { width: 36px; height: 36px; }
+    .cs-carousel-btn.cs-prev { left: 12px; }
+    .cs-carousel-btn.cs-next { right: 12px; }
+    .cs-content { grid-template-columns: 1fr; padding: 48px 24px; gap: 48px; }
+    .cs-sidebar { position: static; }
+    .cs-nav { padding: 48px 24px; }
+    .cs-nav-inner { grid-template-columns: 1fr 1fr; }
+    .cs-nav-home { display: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">Ilona <span>H.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#work">Work</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="cs-hero">
+  <span class="cs-number">04 / 05</span>
+  <p class="cs-tag">Brand Identity · Canva Systems · Website Art Direction</p>
+  <h1 class="cs-title">Clibiya</h1>
+  <p class="cs-subtitle">Freelance, circular economy trading company, Warsaw</p>
+  <p class="cs-overview">Warsaw-based circular economy company trading in bitumen, base oils, fertilizers, and industrial fuels, with recycling and logistics operations across Europe. They came with an identity that wasn't working, a rough logo, inconsistent color application, no system behind it, and asked for a full redesign that preserved the core concept while building something their own team could run with long after I was gone.</p>
+</div>
+
+<div class="cs-carousel" id="carousel">
+  <div class="cs-carousel-viewport">
+  <div class="cs-carousel-track" id="carouselTrack">
+    <div class="cs-carousel-slide">
+      <img src="images/clibiya-1.png" alt="Clibiya — hero logo mark" style="width:100%;height:100%;object-fit:contain;display:block;">
+    </div>
+    <div class="cs-carousel-slide">
+      <img src="images/clibiya-2.png" alt="Clibiya — logo system on light and dark" style="width:100%;height:100%;object-fit:contain;display:block;">
+    </div>
+    <div class="cs-carousel-slide">
+      <img src="images/clibiya-3.png" alt="Clibiya — business cards and letterhead" style="width:100%;height:100%;object-fit:contain;display:block;">
+    </div>
+    <div class="cs-carousel-slide">
+      <img src="images/clibiya-4.png" alt="Clibiya — LinkedIn profile and social banners" style="width:100%;height:100%;object-fit:contain;display:block;">
+    </div>
+    <div class="cs-carousel-slide">
+      <img src="images/clibiya-5.png" alt="Clibiya — campaign banner suite" style="width:100%;height:100%;object-fit:contain;display:block;">
+    </div>
+    <div class="cs-carousel-slide">
+      <img src="images/clibiya-6.png" alt="Clibiya — brand color and typography system" style="width:100%;height:100%;object-fit:contain;display:block;">
+    </div>
+  </div>
+  </div>
+  <button class="cs-carousel-btn cs-prev" id="csPrev" aria-label="Previous"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <button class="cs-carousel-btn cs-next" id="csNext" aria-label="Next"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+</div>
+<div class="cs-carousel-footer">
+  <div class="cs-carousel-dots" id="csDots"><button class="cs-carousel-dot active" data-index="0" aria-label="Slide 1"></button><button class="cs-carousel-dot" data-index="1" aria-label="Slide 2"></button><button class="cs-carousel-dot" data-index="2" aria-label="Slide 3"></button><button class="cs-carousel-dot" data-index="3" aria-label="Slide 4"></button><button class="cs-carousel-dot" data-index="4" aria-label="Slide 5"></button><button class="cs-carousel-dot" data-index="5" aria-label="Slide 6"></button></div>
+  <span class="cs-carousel-counter" id="csCounter">1 / 6</span>
+</div>
+<script>
+(function(){
+  var track=document.getElementById('carouselTrack');
+  var dots=document.querySelectorAll('.cs-carousel-dot');
+  var counter=document.getElementById('csCounter');
+  var total=6;
+  var slides=track.children;
+  var firstClone=slides[0].cloneNode(true);
+  var lastClone=slides[slides.length-1].cloneNode(true);
+  firstClone.setAttribute('aria-hidden','true');
+  lastClone.setAttribute('aria-hidden','true');
+  track.appendChild(firstClone);
+  track.insertBefore(lastClone, slides[0]);
+  var pos=1;
+  function setPos(p, animate){
+    if(!animate){ track.style.transition='none'; }
+    track.style.transform='translateX(-'+(p*100)+'%)';
+    if(!animate){
+      void track.offsetWidth;
+      track.style.transition='';
+    }
+  }
+  function realIndex(p){
+    return ((p-1)+total)%total;
+  }
+  function updateUI(){
+    var idx=realIndex(pos);
+    dots.forEach(function(d,i){d.classList.toggle('active',i===idx);});
+    counter.textContent=(idx+1)+' / '+total;
+  }
+  function resolveClone(){
+    if(pos===total+1){ pos=1; setPos(pos,false); }
+    else if(pos===0){ pos=total; setPos(pos,false); }
+  }
+  function goTo(p){
+    pos=p;
+    setPos(pos,true);
+    updateUI();
+  }
+  function step(delta){
+    resolveClone();
+    goTo(pos+delta);
+  }
+  function jumpTo(realIdx){
+    resolveClone();
+    goTo(realIdx+1);
+  }
+  track.addEventListener('transitionend',function(e){
+    if(e.propertyName!=='transform')return;
+    resolveClone();
+    updateUI();
+  });
+  document.getElementById('csPrev').addEventListener('click',function(){step(-1);});
+  document.getElementById('csNext').addEventListener('click',function(){step(1);});
+  dots.forEach(function(d){d.addEventListener('click',function(){jumpTo(parseInt(d.dataset.index));});});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft')step(-1);
+    if(e.key==='ArrowRight')step(1);
+  });
+  setPos(pos,false);
+  updateUI();
+})();
+</script>
+
+<div class="cs-content">
+  <div class="cs-sections">
+    
+    <div class="cs-section">
+      <p class="cs-section-label">The Brief</p>
+      <div class="cs-section-body"><p>Keep the cube mark and the name. Make everything else better, and make it usable without me.</p></div>
+    </div>
+
+    <div class="cs-section">
+      <p class="cs-section-label">What I Did</p>
+      <div class="cs-section-body"><p>Starting from the original diamond/cube motif, I rebuilt the logo into a clean, faceted 3D mark with a refined violet and mint palette, keeping the geometric idea of the original but making it hold up across professional contexts. I built the full identity system: logo in light and dark variants, business cards, letterhead, email signature, LinkedIn assets, and ad creative. I also set up a Canva template system so the client's team could keep producing on-brand social and marketing assets themselves, without needing a designer for every post. Separately, I art directed the brand's application on their new website, briefing their development team on typography, color, and layout logic so the site matched the system rather than drifting from it.</p></div>
+    </div>
+
+    <div class="cs-section">
+      <p class="cs-section-label">AI in this project</p>
+      <div class="cs-section-body"><p>AI-generated imagery supported the identity work directly, mockup generation and concept exploration across logo directions before committing to a final system, plus generated visuals used in the client's ongoing ad creative and social content. This kept the client supplied with on-brand imagery beyond the initial handoff, not just during the design phase.</p></div>
+    </div>
+
+    <div class="cs-section">
+      <p class="cs-section-label">Outcome</p>
+      <div class="cs-section-body"><p>A complete brand identity delivered to an independent client, from a broken starting point to a live system at clibiya.com, backed by a Canva template library that lets their team stay consistent without ongoing art direction.</p></div>
+    </div>
+  
+  </div>
+  <div class="cs-sidebar">
+    <p class="cs-sidebar-label">Project details</p>
+    <div class="cs-tags"><span class="meta-tag accent">Live · clibiya.com</span><span class="meta-tag">Freelance</span><span class="meta-tag">Full identity system</span><span class="meta-tag">Canva-enabled handoff</span></div>
+    <a href="https://clibiya.com" target="_blank" class="live-link">View live site ↗</a>
+  </div>
+</div>
+
+
+    <nav class="cs-nav">
+      <div class="cs-nav-inner">
+        <a href="index.html#work" class="cs-nav-home">All work</a>
+        <a href="strc.html" class="cs-nav-link prev">
+          <span class="cs-nav-dir">← Previous</span>
+          <span class="cs-nav-title">STRC Brand Direction</span>
+        </a>
+        <a href="bca.html" class="cs-nav-link next">
+          <span class="cs-nav-dir">Next →</span>
+          <span class="cs-nav-title">BCA Dance Competitions</span>
+        </a>
+      </div>
+    </nav>
+  
+
+<section style="background:var(--black);color:var(--white);padding:120px 48px;">
+  <p style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;">Get in touch</p>
+  <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(36px,5vw,64px);line-height:1.05;letter-spacing:-0.03em;margin-bottom:40px;">Let's make<br>something <em style="font-style:italic;color:var(--accent);">worth</em><br>shipping.</h2>
+  <div style="display:flex;flex-direction:column;gap:0;max-width:560px;">
+    <a href="mailto:ilona.harhasevich@gmail.com" style="display:flex;align-items:center;gap:16px;font-size:15px;color:rgba(255,255,255,0.6);text-decoration:none;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.08);">
+      <span style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.25);width:80px;flex-shrink:0;">Email</span>
+      ilona.harhasevich@gmail.com
+    </a>
+    <a href="https://www.linkedin.com/in/ilona-designer/" target="_blank" style="display:flex;align-items:center;gap:16px;font-size:15px;color:rgba(255,255,255,0.6);text-decoration:none;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.08);">
+      <span style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.25);width:80px;flex-shrink:0;">LinkedIn</span>
+      linkedin.com/in/ilona-designer
+    </a>
+  </div>
+  <div style="margin-top:80px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-family:'DM Serif Display',serif;font-size:14px;color:rgba(255,255,255,0.3);">Ilona Harhasevich</span>
+    <span style="font-size:12px;color:rgba(255,255,255,0.2);">Warsaw, Poland · 2026</span>
+  </div>
+</section>
+
+</body>
+</html>
